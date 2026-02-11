@@ -11,7 +11,8 @@
     overflow: hidden;
     background: black;
     height: 100%;
-    font-family: 'Times New Roman', sans-serif;
+    font-family: Times New Roman, sans-serif;
+    touch-action: none; /* 👈 clave para móviles */
   }
 
   h1 {
@@ -19,10 +20,10 @@
     top: 20px;
     width: 100%;
     text-align: center;
-    color: white;
     font-size: 1.6em;
     z-index: 10;
     text-shadow: 0 0 10px pink;
+    transition: color 0.3s linear;
   }
 
   .teamo {
@@ -66,7 +67,7 @@
 </head>
 
 <body>
-<h1>mi mundo se pinta de colores cuando te veo💗</h1>
+<h1 id="title">mi mundo se pinta de colores cuando te veo💗</h1>
 
 <script>
   const colors = [
@@ -75,9 +76,15 @@
     "#ff6f91", "#f72585"
   ];
 
-  // MUCHOS "TE AMO" CAYENDO
+  // 🌈 cambiar color del texto superior
   setInterval(() => {
-    for (let i = 0; i < 3; i++) { // ← cantidad por tanda
+    document.getElementById("title").style.color =
+      colors[Math.floor(Math.random() * colors.length)];
+  }, 400);
+
+  // 💕 muchos "Te amo" cayendo
+  setInterval(() => {
+    for (let i = 0; i < 3; i++) {
       const text = document.createElement("div");
       text.className = "teamo";
       text.innerText = "Te amo";
@@ -85,14 +92,13 @@
       text.style.color = colors[Math.floor(Math.random() * colors.length)];
       text.style.animationDuration = (2 + Math.random() * 2) + "s";
       document.body.appendChild(text);
-
       setTimeout(() => text.remove(), 4000);
     }
-  }, 150); // ← entre más pequeño, MÁS caen
+  }, 150);
 
-  // MUCHOS CORAZONES AL TOCAR O MOVER
+  // 💗 corazones al tocar / arrastrar
   function createHearts(x, y) {
-    for (let i = 0; i < 6; i++) { // ← cantidad de corazones por toque
+    for (let i = 0; i < 6; i++) {
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.innerText = "💗";
@@ -100,7 +106,6 @@
       heart.style.top = (y + Math.random() * 20 - 10) + "px";
       heart.style.color = colors[Math.floor(Math.random() * colors.length)];
       document.body.appendChild(heart);
-
       setTimeout(() => heart.remove(), 1500);
     }
   }
@@ -110,14 +115,16 @@
   });
 
   document.addEventListener("touchstart", e => {
+    e.preventDefault();
     const t = e.touches[0];
     createHearts(t.clientX, t.clientY);
-  });
+  }, { passive: false });
 
   document.addEventListener("touchmove", e => {
+    e.preventDefault();
     const t = e.touches[0];
     createHearts(t.clientX, t.clientY);
-  });
+  }, { passive: false });
 </script>
 </body>
 </html>
