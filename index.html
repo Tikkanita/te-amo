@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Te amo</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #111 0%, #000 70%);
+    font-family: Times New Roman, sans-serif;
+  }
+
+  /* FRASE SUPERIOR */
+  .frase {
+    position: fixed;
+    top: 35px;
+    width: 100%;
+    text-align: center;
+    font-size: 38px;
+    font-family: 'Brush Script MT', cursive;
+    animation: colorTexto 6s linear infinite;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  @keyframes colorTexto {
+    0% { color: #ff4d6d; }
+    25% { color: #ffd166; }
+    50% { color: #80ffdb; }
+    75% { color: #c77dff; }
+    100% { color: #ff4d6d; }
+  }
+
+  /* TE AMO CAYENDO */
+  .teamo {
+    position: fixed;
+    top: -30px;
+    font-size: 18px;
+    opacity: 0.9;
+    animation: caer linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes caer {
+    from {
+      transform: translateY(-30px);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(110vh);
+      opacity: 0;
+    }
+  }
+
+  /* CORAZONES */
+  .heart {
+    position: fixed;
+    font-size: 22px;
+    animation: subir 1.5s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes subir {
+    from {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: scale(1.6) translateY(-80px);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="frase">
+  mi mundo se pinta de colores cuando te veo 💗
+</div>
+
+<script>
+  const colores = [
+    '#ff4d6d', '#ff85a1', '#c77dff',
+    '#4cc9f0', '#80ffdb', '#ffd166'
+  ];
+
+  function crearTeAmo() {
+    const t = document.createElement('div');
+    t.className = 'teamo';
+    t.textContent = 'te amo';
+
+    t.style.left = Math.random() * 100 + 'vw';
+    t.style.color = colores[Math.floor(Math.random() * colores.length)];
+    t.style.fontSize = 14 + Math.random() * 10 + 'px';
+    t.style.animationDuration = 4 + Math.random() * 4 + 's';
+
+    document.body.appendChild(t);
+
+    setTimeout(() => t.remove(), 8000);
+  }
+
+  // MUCHOS "te amo"
+  setInterval(crearTeAmo, 90);
+
+  // CORAZONES AL TOCAR
+  function crearCorazon(x, y) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = '💗';
+
+    h.style.left = x + 'px';
+    h.style.top = y + 'px';
+
+    document.body.appendChild(h);
+
+    setTimeout(() => h.remove(), 1500);
+  }
+
+  document.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    crearCorazon(t.clientX, t.clientY);
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (e.buttons === 1) {
+      crearCorazon(e.clientX, e.clientY);
+    }
+  });
+
+  document.addEventListener('click', e => {
+    crearCorazon(e.clientX, e.clientY);
+  });
+</script>
+
+</body>
+</html>
