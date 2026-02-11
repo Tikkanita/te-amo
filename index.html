@@ -2,79 +2,63 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Te amo</title>
-
+<title>Te amo 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  * {
+  html, body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    height: 100vh;
     overflow: hidden;
-    background: radial-gradient(circle at top, #111 0%, #000 70%);
-    font-family: Times New Roman, sans-serif;
+    background: black;
+    height: 100%;
+    font-family: 'Times New Roman', sans-serif;
   }
 
-  /* FRASE SUPERIOR */
-  .frase {
+  h1 {
     position: fixed;
-    top: 35px;
+    top: 20px;
     width: 100%;
     text-align: center;
-    font-size: 38px;
-    font-family: 'Brush Script MT', cursive;
-    animation: colorTexto 6s linear infinite;
+    color: white;
+    font-size: 1.6em;
     z-index: 10;
-    pointer-events: none;
+    text-shadow: 0 0 10px pink;
   }
 
-  @keyframes colorTexto {
-    0% { color: #ff4d6d; }
-    25% { color: #ffd166; }
-    50% { color: #80ffdb; }
-    75% { color: #c77dff; }
-    100% { color: #ff4d6d; }
-  }
-
-  /* TE AMO CAYENDO */
   .teamo {
-    position: fixed;
-    top: -30px;
-    font-size: 18px;
-    opacity: 0.9;
-    animation: caer linear forwards;
+    position: absolute;
+    font-size: 22px;
+    font-weight: bold;
+    animation: fall linear forwards;
+    user-select: none;
     pointer-events: none;
   }
 
-  @keyframes caer {
-    from {
-      transform: translateY(-30px);
+  @keyframes fall {
+    0% {
+      transform: translateY(-50px);
       opacity: 1;
     }
-    to {
+    100% {
       transform: translateY(110vh);
       opacity: 0;
     }
   }
 
-  /* CORAZONES */
   .heart {
-    position: fixed;
-    font-size: 22px;
-    animation: subir 1.5s ease-out forwards;
+    position: absolute;
+    font-size: 24px;
+    animation: float 1.5s ease-out forwards;
     pointer-events: none;
   }
 
-  @keyframes subir {
-    from {
+  @keyframes float {
+    0% {
       transform: scale(1) translateY(0);
       opacity: 1;
     }
-    to {
-      transform: scale(1.6) translateY(-80px);
+    100% {
+      transform: scale(1.8) translateY(-80px);
       opacity: 0;
     }
   }
@@ -82,64 +66,58 @@
 </head>
 
 <body>
-
-<div class="frase">
-  mi mundo se pinta de colores cuando te veo 💗
-</div>
+<h1>mi mundo se pinta de colores cuando te veo💗</h1>
 
 <script>
-  const colores = [
-    '#ff4d6d', '#ff85a1', '#c77dff',
-    '#4cc9f0', '#80ffdb', '#ffd166'
+  const colors = [
+    "#ff4d6d", "#ff85a1", "#ffccf9",
+    "#c77dff", "#7bdff2", "#ffd166",
+    "#ff6f91", "#f72585"
   ];
 
-  function crearTeAmo() {
-    const t = document.createElement('div');
-    t.className = 'teamo';
-    t.textContent = 'te amo';
+  // MUCHOS "TE AMO" CAYENDO
+  setInterval(() => {
+    for (let i = 0; i < 3; i++) { // ← cantidad por tanda
+      const text = document.createElement("div");
+      text.className = "teamo";
+      text.innerText = "Te amo";
+      text.style.left = Math.random() * window.innerWidth + "px";
+      text.style.color = colors[Math.floor(Math.random() * colors.length)];
+      text.style.animationDuration = (2 + Math.random() * 2) + "s";
+      document.body.appendChild(text);
 
-    t.style.left = Math.random() * 100 + 'vw';
-    t.style.color = colores[Math.floor(Math.random() * colores.length)];
-    t.style.fontSize = 14 + Math.random() * 10 + 'px';
-    t.style.animationDuration = 4 + Math.random() * 4 + 's';
-
-    document.body.appendChild(t);
-
-    setTimeout(() => t.remove(), 8000);
-  }
-
-  // MUCHOS "te amo"
-  setInterval(crearTeAmo, 90);
-
-  // CORAZONES AL TOCAR
-  function crearCorazon(x, y) {
-    const h = document.createElement('div');
-    h.className = 'heart';
-    h.textContent = '💗';
-
-    h.style.left = x + 'px';
-    h.style.top = y + 'px';
-
-    document.body.appendChild(h);
-
-    setTimeout(() => h.remove(), 1500);
-  }
-
-  document.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    crearCorazon(t.clientX, t.clientY);
-  });
-
-  document.addEventListener('mousemove', e => {
-    if (e.buttons === 1) {
-      crearCorazon(e.clientX, e.clientY);
+      setTimeout(() => text.remove(), 4000);
     }
+  }, 150); // ← entre más pequeño, MÁS caen
+
+  // MUCHOS CORAZONES AL TOCAR O MOVER
+  function createHearts(x, y) {
+    for (let i = 0; i < 6; i++) { // ← cantidad de corazones por toque
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💗";
+      heart.style.left = (x + Math.random() * 20 - 10) + "px";
+      heart.style.top = (y + Math.random() * 20 - 10) + "px";
+      heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 1500);
+    }
+  }
+
+  document.addEventListener("click", e => {
+    createHearts(e.clientX, e.clientY);
   });
 
-  document.addEventListener('click', e => {
-    crearCorazon(e.clientX, e.clientY);
+  document.addEventListener("touchstart", e => {
+    const t = e.touches[0];
+    createHearts(t.clientX, t.clientY);
+  });
+
+  document.addEventListener("touchmove", e => {
+    const t = e.touches[0];
+    createHearts(t.clientX, t.clientY);
   });
 </script>
-
 </body>
 </html>
